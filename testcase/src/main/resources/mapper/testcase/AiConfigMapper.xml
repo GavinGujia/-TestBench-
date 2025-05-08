@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.testcase.mapper.AiConfigMapper">
+    
+    <resultMap type="com.ruoyi.testcase.domain.AiConfig" id="AiConfigResult">
+        <id property="id" column="id"/>
+        <result property="authorizationKey" column="authorization_key"/>
+        <result property="promptTemplate" column="prompt_template"/>
+        <result property="model" column="model"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <sql id="selectAiConfigVo">
+        select id, authorization_key, prompt_template, model, create_by, create_time, update_by, update_time, del_flag 
+        from ai_config
+    </sql>
+
+    <!-- 查询AI配置 -->
+    <select id="selectAiConfigById" parameterType="Long" resultMap="AiConfigResult">
+        <include refid="selectAiConfigVo"/>
+        where id = #{id} and del_flag = '0'
+    </select>
+
+    <!-- 获取默认AI配置（取第一条记录） -->
+    <select id="selectDefaultAiConfig" resultMap="AiConfigResult">
+        <include refid="selectAiConfigVo"/>
+        where del_flag = '0'
+        limit 1
+    </select>
+
+</mapper> 

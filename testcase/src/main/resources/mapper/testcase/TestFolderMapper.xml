@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.testcase.mapper.TestFolderMapper">
+    
+    <resultMap type="com.ruoyi.testcase.domain.TestFolder" id="TestFolderResult">
+        <id     property="id"           column="id"           />
+        <result property="name"         column="name"         />
+        <result property="parentId"     column="parent_id"    />
+        <result property="createBy"     column="create_by"    />
+        <result property="createTime"   column="create_time"  />
+        <result property="updateBy"     column="update_by"    />
+        <result property="updateTime"   column="update_time"  />
+        <result property="delFlag"      column="del_flag"     />
+    </resultMap>
+
+    <sql id="selectTestFolderVo">
+        select id, name, parent_id, create_by, create_time, update_by, update_time, del_flag 
+        from test_folder
+    </sql>
+
+    <select id="selectTestFolderList" parameterType="com.ruoyi.testcase.domain.TestFolder" resultMap="TestFolderResult">
+        <include refid="selectTestFolderVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            and del_flag = '0'
+        </where>
+        order by parent_id
+    </select>
+    
+    <select id="selectTestFolderById" parameterType="Long" resultMap="TestFolderResult">
+        <include refid="selectTestFolderVo"/>
+        where id = #{id} and del_flag = '0'
+    </select>
+    
+    <select id="selectTestFolderAll" resultMap="TestFolderResult">
+        <include refid="selectTestFolderVo"/>
+        where del_flag = '0' order by parent_id
+    </select>
+        
+    <insert id="insertTestFolder" parameterType="com.ruoyi.testcase.domain.TestFolder" useGeneratedKeys="true" keyProperty="id">
+        insert into test_folder
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTestFolder" parameterType="com.ruoyi.testcase.domain.TestFolder">
+        update test_folder
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTestFolderById" parameterType="Long">
+        update test_folder set del_flag = '1' where id = #{id}
+    </delete>
+
+    <delete id="deleteTestFolderByIds" parameterType="String">
+        update test_folder set del_flag = '1' where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper> 

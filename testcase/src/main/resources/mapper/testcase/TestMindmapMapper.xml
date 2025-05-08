@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.testcase.mapper.TestMindmapMapper">
+    
+    <resultMap type="com.ruoyi.testcase.domain.TestMindmap" id="TestMindmapResult">
+        <id     property="id"           column="id"           />
+        <result property="name"         column="name"         />
+        <result property="folderId"     column="folder_id"    />
+        <result property="requirement"  column="requirement"  />
+        <result property="owner"        column="owner"        />
+        <result property="createBy"     column="create_by"    />
+        <result property="createTime"   column="create_time"  />
+        <result property="updateBy"     column="update_by"    />
+        <result property="updateTime"   column="update_time"  />
+        <result property="delFlag"      column="del_flag"     />
+        <result property="content"      column="content"      />
+    </resultMap>
+
+    <sql id="selectTestMindmapVo">
+        select id, name, folder_id, requirement, owner, content, create_by, create_time, update_by, update_time, del_flag
+        from test_mindmap
+    </sql>
+
+    <select id="selectTestMindmapList" parameterType="com.ruoyi.testcase.domain.TestMindmap" resultMap="TestMindmapResult">
+        <include refid="selectTestMindmapVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="folderId != null "> and folder_id = #{folderId}</if>
+            <if test="requirement != null  and requirement != ''"> and requirement = #{requirement}</if>
+            <if test="owner != null  and owner != ''"> and owner = #{owner}</if>
+            and del_flag = '0'
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectTestMindmapById" parameterType="Long" resultMap="TestMindmapResult">
+        <include refid="selectTestMindmapVo"/>
+        where id = #{id} and del_flag = '0'
+    </select>
+    
+    <select id="selectTestMindmapByFolderId" parameterType="Long" resultMap="TestMindmapResult">
+        <include refid="selectTestMindmapVo"/>
+        where folder_id = #{folderId} and del_flag = '0'
+        order by create_time desc
+    </select>
+        
+    <insert id="insertTestMindmap" parameterType="com.ruoyi.testcase.domain.TestMindmap" useGeneratedKeys="true" keyProperty="id">
+        insert into test_mindmap
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="folderId != null">folder_id,</if>
+            <if test="requirement != null">requirement,</if>
+            <if test="owner != null">owner,</if>
+            <if test="content != null">content,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="folderId != null">#{folderId},</if>
+            <if test="requirement != null">#{requirement},</if>
+            <if test="owner != null">#{owner},</if>
+            <if test="content != null">#{content},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTestMindmap" parameterType="com.ruoyi.testcase.domain.TestMindmap">
+        update test_mindmap
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="folderId != null">folder_id = #{folderId},</if>
+            <if test="requirement != null">requirement = #{requirement},</if>
+            <if test="owner != null">owner = #{owner},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTestMindmapById" parameterType="Long">
+        update test_mindmap set del_flag = '1' where id = #{id}
+    </delete>
+
+    <delete id="deleteTestMindmapByIds" parameterType="Long">
+        update test_mindmap set del_flag = '1' where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <insert id="insertMindmapContent" parameterType="com.ruoyi.testcase.domain.TestMindmap">
+        update test_mindmap
+        set content = #{content}, 
+            update_by = #{updateBy},
+            update_time = #{updateTime}
+        where id = #{id}
+    </insert>
+    
+    <update id="updateMindmapContent" parameterType="com.ruoyi.testcase.domain.TestMindmap">
+        update test_mindmap
+        set content = #{content}, 
+            update_by = #{updateBy},
+            update_time = #{updateTime}
+        where id = #{id}
+    </update>
+</mapper> 

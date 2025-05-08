@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.testcase.mapper.TestMindmapHistoryMapper">
+    
+    <resultMap type="TestMindmapHistory" id="TestMindmapHistoryResult">
+        <result property="id"    column="id"    />
+        <result property="mindmapId"    column="mindmap_id"    />
+        <result property="content"    column="content"    />
+        <result property="description"    column="description"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTestMindmapHistoryVo">
+        select version_id as id, mindmap_id, content, description, create_by, create_time from test_mindmap_history
+    </sql>
+
+    <select id="selectTestMindmapHistoryList" parameterType="TestMindmapHistory" resultMap="TestMindmapHistoryResult">
+        <include refid="selectTestMindmapHistoryVo"/>
+        <where>  
+            <if test="mindmapId != null "> and mindmap_id = #{mindmapId}</if>
+            <if test="description != null  and description != ''"> and description like concat('%', #{description}, '%')</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectTestMindmapHistoryById" parameterType="Long" resultMap="TestMindmapHistoryResult">
+        <include refid="selectTestMindmapHistoryVo"/>
+        where version_id = #{id}
+    </select>
+    
+    <select id="selectHistoryByMindmapId" parameterType="Long" resultMap="TestMindmapHistoryResult">
+        <include refid="selectTestMindmapHistoryVo"/>
+        where mindmap_id = #{mindmapId}
+        order by create_time desc
+    </select>
+        
+    <insert id="insertTestMindmapHistory" parameterType="TestMindmapHistory" useGeneratedKeys="true" keyProperty="id">
+        insert into test_mindmap_history
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mindmapId != null">mindmap_id,</if>
+            <if test="content != null">content,</if>
+            <if test="description != null">description,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mindmapId != null">#{mindmapId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="description != null">#{description},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTestMindmapHistory" parameterType="TestMindmapHistory">
+        update test_mindmap_history
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mindmapId != null">mindmap_id = #{mindmapId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTestMindmapHistoryById" parameterType="Long">
+        delete from test_mindmap_history where version_id = #{id}
+    </delete>
+
+    <delete id="deleteTestMindmapHistoryByIds" parameterType="String">
+        delete from test_mindmap_history where version_id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteHistoryByMindmapId" parameterType="Long">
+        delete from test_mindmap_history where mindmap_id = #{mindmapId}
+    </delete>
+    
+</mapper> 
