@@ -1,43 +1,34 @@
-本地部署步骤：
-1、环境准备：
-JDK >= 1.8 (推荐1.8版本)
-Mysql >= 5.7.0 (推荐5.7版本)
-Redis >= 3.0
-Maven >= 3.0
-Node >= 12
+#本地部署步骤：
+##1、环境准备：
+#####JDK >= 1.8 (推荐1.8版本)
+#####Mysql >= 5.7.0 (推荐5.7版本)
+#####Redis >= 3.0
+#####Maven >= 3.0
+#####Node >= 12
 
-2、后端运行：
-2.1、Git克隆仓库代码到本地，然后IDEA导入项目，IDEA会自动加载Maven依赖包，初次加载会比较慢（根据自身网络情况而定）
-2.2、创建MySQL数据库ry-vue,并导入执行数据脚本ry_2021xxxx.sql，quartz.sql, testcase.sql, ai_config.sql
-2.3、在ruoyi-admin/src/main/resources/application-druid.yml文件，添加MySQL主库数据源连接信息
-2.4、启动Redis服务
-2.5、打开项目运行ruoyi-admin/src/main/java/com/ruoyi/RuoYiApplication.java，出现如下图表示启动成功。
+##2、后端运行：
+#####2.1、Git克隆仓库代码到本地，然后IDEA导入项目，IDEA会自动加载Maven依赖包，初次加载会比较慢（根据自身网络情况而定）
+#####2.2、创建MySQL数据库ry-vue,并导入执行数据脚本ry_2021xxxx.sql，quartz.sql, testcase.sql, ai_config.sql
+#####2.3、在ruoyi-admin/src/main/resources/application-druid.yml文件，添加MySQL主库数据源连接信息
+#####2.4、启动Redis服务
+#####2.5、打开项目运行ruoyi-admin/src/main/java/com/ruoyi/RuoYiApplication.java，出现：(♥◠‿◠)ﾉﾞ  若依启动成功   ლ(´ڡ`ლ)ﾞ 表示启动成功。后端运行成功可以通过(http://localhost:8080 (opens new window))访问，但是不会出现静态页面
 
-(♥◠‿◠)ﾉﾞ  若依启动成功   ლ(´ڡ`ლ)ﾞ  
- .-------.       ____     __        
- |  _ _   \      \   \   /  /    
- | ( ' )  |       \  _. /  '       
- |(_ o _) /        _( )_ .'         
- | (_,_).' __  ___(_ o _)'          
- |  |\ \  |  ||   |(_,_)'         
- |  | \ `'   /|   `-'  /           
- |  |  \    /  \      /           
- ''-'   `'-'    `-..-'    
-
-3、前端运行
-# 进入项目目录
+##3、前端运行
+### 进入项目目录
 cd ruoyi-ui
 
-# 安装依赖
+### 安装依赖
 npm install
 
-# 强烈建议不要用直接使用 cnpm 安装，会有各种诡异的 bug，可以通过重新指定 registry 来解决 npm 安装速度慢的问题。
+强烈建议不要用直接使用 cnpm 安装，会有各种诡异的 bug，可以通过重新指定 registry 来解决 npm 安装速度慢的问题。
 npm install --registry=https://registry.npmmirror.com
 
-# 本地开发 启动项目
+### 本地开发 启动项目
 npm run dev
 打开浏览器，输入：(http://localhost:80 ) 默认账户/密码 admin/admin123）
 若能正确展示登录页面，并能成功登录，菜单及页面展示正常，则表明环境搭建成功
+
+
 
 
 
